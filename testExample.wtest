@@ -1,9 +1,65 @@
-import example.pepita
+import inscripcionAMaterias.*
 
-describe "group of tests for pepita" {
+describe "Inscripción a materias" {
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
+  test "Inscribir a Alex" {
+    const alex = new Estudiante()
+
+    const programacion = new Carrera()
+    const tecnicaturaEnEcoSocial = new Carrera()
+    const solidaria = new Carrera()
+    const terapiaOcupacional = new Carrera()
+
+    const epyl = new Materia()
+    const matematica1 = new Materia()
+    const objetos1 = new Materia()
+    const objetos2 = new Materia()
+    const objetos3 = new Materia()
+    const bD = new Materia()
+    const pConc = new Materia()
+
+    programacion.agregarMateria(epyl)
+    programacion.agregarMateria(matematica1)
+    programacion.agregarMateria(objetos1)
+    programacion.agregarMateria(objetos2)
+    programacion.agregarMateria(objetos3)
+    programacion.agregarMateria(bD)
+    programacion.agregarMateria(pConc)
+
+    const meya = new Materia()
+    const tys = new Materia()
+    const economia = new Materia()
+    const desarrolloLocal = new Materia()
+    
+    solidaria.agregarMateria(meya)
+    solidaria.agregarMateria(tys)
+    solidaria.agregarMateria(economia)
+    solidaria.agregarMateria(desarrolloLocal)
+
+    const lea = new Materia()
+    const cienciasDeLaSalud = new Materia()
+    const psicologia = new Materia()
+    const antroplogia = new Materia()
+    const sociologia = new Materia() 
+
+    terapiaOcupacional.agregarMateria(lea)
+    terapiaOcupacional.agregarMateria(cienciasDeLaSalud)
+    terapiaOcupacional.agregarMateria(psicologia)
+    terapiaOcupacional.agregarMateria(antroplogia)
+    terapiaOcupacional.agregarMateria(sociologia)
+
+    alex.inscribirseACarrera(programacion)
+    alex.inscribirseACarrera(solidaria)
+
+    assert.that(alex.estaInscriptoEn(programacion))
+    assert.that(alex.estaInscriptoEn(solidaria))
+    assert.notThat(alex.estaInscriptoEn(terapiaOcupacional))
+
+    assert.that(alex.perteneceA(bD))
+    assert.notThat(alex.perteneceA(psicologia))
+    assert.throwsException({alex.inscribirseACarrera(programacion)})
+
   }
 
 }
+
