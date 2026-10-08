@@ -2,12 +2,10 @@ import inscripcionAMaterias.*
 
 describe "Inscripción a materias" {
 
-  test "Inscribir a Alex" {
-    const alex = new Estudiante()
+   const alex = new Estudiante()
 
     const programacion = new Carrera()
-    const tecnicaturaEnEcoSocial = new Carrera()
-    const solidaria = new Carrera()
+    const tuess = new Carrera()
     const terapiaOcupacional = new Carrera()
 
     const epyl = new Materia()
@@ -18,6 +16,41 @@ describe "Inscripción a materias" {
     const bD = new Materia()
     const pConc = new Materia()
 
+    const meya = new Materia()
+    const tys = new Materia()
+    const economia = new Materia()
+    const desarrolloLocal = new Materia()
+
+    const lea = new Materia()
+    const cienciasDeLaSalud = new Materia()
+    const psicologia = new Materia()
+    const antropologia = new Materia()
+    const sociologia = new Materia() 
+    
+
+
+  method initialize() {
+
+    epyl.carreraALaQuePertenece(programacion)
+    matematica1.carreraALaQuePertenece(programacion)
+    objetos1.carreraALaQuePertenece(programacion)
+    objetos2.carreraALaQuePertenece(programacion)
+    objetos3.carreraALaQuePertenece(programacion)
+    bD.carreraALaQuePertenece(programacion)
+    pConc.carreraALaQuePertenece(programacion)
+
+    meya.carreraALaQuePertenece(tuess)
+    tys.carreraALaQuePertenece(tuess)
+    economia.carreraALaQuePertenece(tuess)
+    desarrolloLocal.carreraALaQuePertenece(tuess)
+
+    lea.carreraALaQuePertenece(terapiaOcupacional)
+    cienciasDeLaSalud.carreraALaQuePertenece(terapiaOcupacional)
+    psicologia.carreraALaQuePertenece(terapiaOcupacional)
+    antropologia.carreraALaQuePertenece(terapiaOcupacional)
+    sociologia.carreraALaQuePertenece(terapiaOcupacional)
+   
+   
     programacion.agregarMateria(epyl)
     programacion.agregarMateria(matematica1)
     programacion.agregarMateria(objetos1)
@@ -25,40 +58,59 @@ describe "Inscripción a materias" {
     programacion.agregarMateria(objetos3)
     programacion.agregarMateria(bD)
     programacion.agregarMateria(pConc)
-
-    const meya = new Materia()
-    const tys = new Materia()
-    const economia = new Materia()
-    const desarrolloLocal = new Materia()
     
-    solidaria.agregarMateria(meya)
-    solidaria.agregarMateria(tys)
-    solidaria.agregarMateria(economia)
-    solidaria.agregarMateria(desarrolloLocal)
-
-    const lea = new Materia()
-    const cienciasDeLaSalud = new Materia()
-    const psicologia = new Materia()
-    const antroplogia = new Materia()
-    const sociologia = new Materia() 
+    tuess.agregarMateria(meya)
+    tuess.agregarMateria(tys)
+    tuess.agregarMateria(economia)
+    tuess.agregarMateria(desarrolloLocal)
 
     terapiaOcupacional.agregarMateria(lea)
     terapiaOcupacional.agregarMateria(cienciasDeLaSalud)
     terapiaOcupacional.agregarMateria(psicologia)
-    terapiaOcupacional.agregarMateria(antroplogia)
+    terapiaOcupacional.agregarMateria(antropologia)
     terapiaOcupacional.agregarMateria(sociologia)
 
     alex.inscribirseACarrera(programacion)
-    alex.inscribirseACarrera(solidaria)
+    alex.inscribirseACarrera(tuess)
 
+  }
+
+  test "Inscribir a Alex" {
+    
     assert.that(alex.estaInscriptoEn(programacion))
-    assert.that(alex.estaInscriptoEn(solidaria))
+    assert.that(alex.estaInscriptoEn(tuess))
     assert.notThat(alex.estaInscriptoEn(terapiaOcupacional))
 
     assert.that(alex.perteneceA(bD))
     assert.notThat(alex.perteneceA(psicologia))
     assert.throwsException({alex.inscribirseACarrera(programacion)})
 
+  }
+  test "Historia académica de Alex" {
+    
+    alex.finalizacionDeCursadaDe(matematica1, 2)
+    alex.finalizacionDeCursadaDe(objetos1, 10)
+    alex.finalizacionDeCursadaDe(economia, 6)
+    alex.finalizacionDeCursadaDe(tys, 8)
+    alex.finalizacionDeCursadaDe(matematica1, 8)
+    alex.finalizacionDeCursadaDe(bD, 2)
+
+    assert.throwsException({alex.finalizacionDeCursadaDe(matematica1, 7)})
+    assert.throwsException({alex.finalizacionDeCursadaDe(bD, 12)})
+
+    assert.that(alex.fueAprobadaAntes(matematica1))
+    assert.notThat(alex.fueAprobadaAntes(bD))
+
+    assert.equals(9, alex.promedioDeMateriasDe(programacion))
+    assert.equals(2, alex.cantidadDeMateriasAprobadasDe(programacion))
+    assert.equals(7, alex.promedioDeMateriasDe(tuess))
+    assert.throwsException({alex.promedioDeMateriasDe(terapiaOcupacional)})
+
+    alex.inscribirseACarrera(terapiaOcupacional)
+    assert.throwsException({alex.promedioDeMateriasDe(terapiaOcupacional)})
+
+    assert.equals(8, alex.promedioDeTodasLasMaterias())
+    assert.equals([2,8], alex.cursadasDe(matematica1))
   }
 
 }
