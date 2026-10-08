@@ -83,16 +83,52 @@ class Estudiante {
   method cursadasDe(_materia) {
     return self. materiasCursadasDe(_materia).map({notaDeMateria => notaDeMateria.nota()})
   }
+  method puedeInscribirseA(_materia) {
+    return not self.fueAprobadaAntes(_materia)    && 
+               self.perteneceA(_materia)          &&
+              self.cumpleLosRequisitos(_materia)  &&
+              not _materia.estudiantesInscriptos().contains(self)
+  }
+  method cumpleLosRequisitos(_materia) {
+    return _materia.requisitos().all({requisito => self.fueAprobadaAntes(requisito)})
+  }
+  method inscribirAMateria(_materia) {
+    self.validarInscribirAMateria(_materia)
+    _materia.inscribirEstudiante(self)
+  }
+  method validarInscribirAMateria(_materia) {
+    if (not self.puedeInscribirseA(_materia)) {
+      self.error("No puede inscribirse a la materia")
+    }
+  }
+  method materiasHabilitadas(_carrera) {
+    return _carrera.materias().filter({materia => self.puedeInscribirseA(materia)})
+  }
+  
 }
 
 class Materia {
   var carreraALaQuePertenece = null
+  var estudiantesInscriptos = #{}
+  const requisitos = #{}
 
   method carrera() {
     return carreraALaQuePertenece
   }
   method carreraALaQuePertenece(_carrera) {
     carreraALaQuePertenece = _carrera
+  }
+  method estudiantesInscriptos() {
+    return estudiantesInscriptos
+  }
+  method inscribirEstudiante(_estudiante) {
+    estudiantesInscriptos.add(_estudiante)
+  }
+  method requisitos(_values) {
+    requisitos.add(_values)
+  }
+  method requisitos() {
+    return requisitos
   }
 }
 

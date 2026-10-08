@@ -3,6 +3,7 @@ import inscripcionAMaterias.*
 describe "Inscripción a materias" {
 
    const alex = new Estudiante()
+   const andy = new Estudiante()
 
     const programacion = new Carrera()
     const tuess = new Carrera()
@@ -73,6 +74,8 @@ describe "Inscripción a materias" {
     alex.inscribirseACarrera(programacion)
     alex.inscribirseACarrera(tuess)
 
+    andy.inscribirseACarrera(programacion)
+
   }
 
   test "Inscribir a Alex" {
@@ -111,6 +114,45 @@ describe "Inscripción a materias" {
 
     assert.equals(8, alex.promedioDeTodasLasMaterias())
     assert.equals([2,8], alex.cursadasDe(matematica1))
+  }
+  test "inscribir a alex a materias" {
+  objetos2.requisitos(objetos1)
+  objetos2.requisitos(matematica1)
+
+  objetos3.requisitos(objetos2)
+  objetos3.requisitos(bD)
+
+  pConc.requisitos(objetos1)
+  pConc.requisitos(bD)
+
+  desarrolloLocal.requisitos(meya)
+
+  alex.finalizacionDeCursadaDe(objetos1, 10)
+  alex.finalizacionDeCursadaDe(matematica1, 8)
+  alex.finalizacionDeCursadaDe(economia, 6)
+  alex.finalizacionDeCursadaDe(tys, 8)
+
+  andy.finalizacionDeCursadaDe(objetos1, 10)
+  andy.finalizacionDeCursadaDe(matematica1, 10)
+
+  assert.that(alex.puedeInscribirseA(objetos2))
+  assert.equals([epyl, objetos2, bD], alex.materiasHabilitadas(programacion))
+  assert.equals([meya], alex.materiasHabilitadas(tuess))
+
+  assert.notThat(alex.puedeInscribirseA(psicologia))
+  assert.throwsException({alex.inscribirAMateria(psicologia)})
+
+  assert.notThat(alex.puedeInscribirseA(economia))
+  assert.throwsException({alex.inscribirAMateria(economia)})
+
+  assert.notThat(alex.puedeInscribirseA(desarrolloLocal))
+  assert.throwsException({alex.inscribirAMateria(desarrolloLocal)})
+
+  alex.inscribirAMateria(objetos2)
+  assert.throwsException({alex.inscribirAMateria(objetos2)})
+
+  andy.inscribirAMateria(objetos2)
+  assert.equals(#{alex,andy}, objetos2.estudiantesInscriptos())
   }
 
 }
