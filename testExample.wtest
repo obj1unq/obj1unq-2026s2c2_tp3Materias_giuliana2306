@@ -60,5 +60,33 @@ describe "Inscripción a materias" {
     assert.notThat(alex.materiaPerteneceACarrera(psicologia))
     assert.throwsException({alex.inscribirseA(programacion)})
   }
+  test "historia academica de alex" {
+    alex.inscribirseA(programacion)
+    alex.inscribirseA(tuess)
+
+    alex.finalizoLaCursadaDe(matematica1, 2)
+    alex.finalizoLaCursadaDe(objetos1, 10)
+    alex.finalizoLaCursadaDe(economia, 6)
+    alex.finalizoLaCursadaDe(tys, 8)
+    alex.finalizoLaCursadaDe(matematica1, 8)
+    alex.finalizoLaCursadaDe(bd, 2)
+
+    assert.throwsException({alex.finalizoLaCursadaDe(matematica1, 7)})
+    assert.throwsException({alex.finalizoLaCursadaDe(bd, 12)})
+
+    assert.that(alex.aproboLaMateria(matematica1))
+    assert.notThat(alex.aproboLaMateria(bd))
+
+    assert.equals(9, alex.promedioDe(programacion))
+    assert.equals(2, alex.cantDeMateriasAprobadas(programacion))
+
+    assert.equals(7, alex.promedioDe(tuess))
+    assert.throwsException({alex.promedioDe(to)})
+
+    alex.inscribirseA(to)
+    assert.throwsException({alex.promedioDe(to)})
+
+    assert.equals(8, alex.promedioDeMateriasAprobadasDeCarreras())
+  }
 }
 
