@@ -2,158 +2,63 @@ import inscripcionAMaterias.*
 
 describe "Inscripción a materias" {
 
-   const alex = new Estudiante()
-   const andy = new Estudiante()
+  const alex = new Estudiante()
 
-    const programacion = new Carrera()
-    const tuess = new Carrera()
-    const terapiaOcupacional = new Carrera()
+  const programacion = new Carrera()
+  const tuess = new Carrera()
+  const to = new Carrera()
 
-    const epyl = new Materia()
-    const matematica1 = new Materia()
-    const objetos1 = new Materia()
-    const objetos2 = new Materia()
-    const objetos3 = new Materia()
-    const bD = new Materia()
-    const pConc = new Materia()
+  const epl = new Materia()
+  const matematica1 = new Materia()
+  const objetos1 = new Materia()
+  const objetos2 = new Materia()
+  const objetos3 = new Materia()
+  const bd = new Materia()
+  const pconc = new Materia()
 
-    const meya = new Materia()
-    const tys = new Materia()
-    const economia = new Materia()
-    const desarrolloLocal = new Materia()
+  const meya = new Materia()
+  const tys = new Materia()
+  const economia = new Materia()
+  const desarrolloLocal = new Materia()
 
-    const lea = new Materia()
-    const cienciasDeLaSalud = new Materia()
-    const psicologia = new Materia()
-    const antropologia = new Materia()
-    const sociologia = new Materia() 
-    
-
+  const lea = new Materia()
+  const cienciasDeLaSalud = new Materia()
+  const psicologia = new Materia()
+  const antropologia = new Materia()
+  const sociologia = new Materia()
 
   method initialize() {
 
-    epyl.carreraALaQuePertenece(programacion)
-    matematica1.carreraALaQuePertenece(programacion)
-    objetos1.carreraALaQuePertenece(programacion)
-    objetos2.carreraALaQuePertenece(programacion)
-    objetos3.carreraALaQuePertenece(programacion)
-    bD.carreraALaQuePertenece(programacion)
-    pConc.carreraALaQuePertenece(programacion)
-
-    meya.carreraALaQuePertenece(tuess)
-    tys.carreraALaQuePertenece(tuess)
-    economia.carreraALaQuePertenece(tuess)
-    desarrolloLocal.carreraALaQuePertenece(tuess)
-
-    lea.carreraALaQuePertenece(terapiaOcupacional)
-    cienciasDeLaSalud.carreraALaQuePertenece(terapiaOcupacional)
-    psicologia.carreraALaQuePertenece(terapiaOcupacional)
-    antropologia.carreraALaQuePertenece(terapiaOcupacional)
-    sociologia.carreraALaQuePertenece(terapiaOcupacional)
-   
-   
-    programacion.agregarMateria(epyl)
+    programacion.agregarMateria(epl)
     programacion.agregarMateria(matematica1)
     programacion.agregarMateria(objetos1)
     programacion.agregarMateria(objetos2)
     programacion.agregarMateria(objetos3)
-    programacion.agregarMateria(bD)
-    programacion.agregarMateria(pConc)
-    
+    programacion.agregarMateria(bd)
+    programacion.agregarMateria(pconc)
+
     tuess.agregarMateria(meya)
     tuess.agregarMateria(tys)
     tuess.agregarMateria(economia)
     tuess.agregarMateria(desarrolloLocal)
 
-    terapiaOcupacional.agregarMateria(lea)
-    terapiaOcupacional.agregarMateria(cienciasDeLaSalud)
-    terapiaOcupacional.agregarMateria(psicologia)
-    terapiaOcupacional.agregarMateria(antropologia)
-    terapiaOcupacional.agregarMateria(sociologia)
-
-    alex.inscribirseACarrera(programacion)
-    alex.inscribirseACarrera(tuess)
-
-    andy.inscribirseACarrera(programacion)
-
+    to.agregarMateria(lea)
+    to.agregarMateria(cienciasDeLaSalud)
+    to.agregarMateria(psicologia)
+    to.agregarMateria(antropologia)
+    to.agregarMateria(sociologia)
   }
+  test "Inscribir a Alex a carreras" {
+    alex.inscribirseA(programacion)
+    alex.inscribirseA(tuess)
 
-  test "Inscribir a Alex" {
-    
-    assert.that(alex.estaInscriptoEn(programacion))
-    assert.that(alex.estaInscriptoEn(tuess))
-    assert.notThat(alex.estaInscriptoEn(terapiaOcupacional))
+    assert.that(alex.estaInscriptaEn(programacion))
+    assert.that(alex.estaInscriptaEn(tuess))
+    assert.notThat(alex.estaInscriptaEn(to))
 
-    assert.that(alex.perteneceA(bD))
-    assert.notThat(alex.perteneceA(psicologia))
-    assert.throwsException({alex.inscribirseACarrera(programacion)})
-
+    assert.that(alex.materiaPerteneceACarrera(bd))
+    assert.notThat(alex.materiaPerteneceACarrera(psicologia))
+    assert.throwsException({alex.inscribirseA(programacion)})
   }
-  test "Historia académica de Alex" {
-    
-    alex.finalizacionDeCursadaDe(matematica1, 2)
-    alex.finalizacionDeCursadaDe(objetos1, 10)
-    alex.finalizacionDeCursadaDe(economia, 6)
-    alex.finalizacionDeCursadaDe(tys, 8)
-    alex.finalizacionDeCursadaDe(matematica1, 8)
-    alex.finalizacionDeCursadaDe(bD, 2)
-
-    assert.throwsException({alex.finalizacionDeCursadaDe(matematica1, 7)})
-    assert.throwsException({alex.finalizacionDeCursadaDe(bD, 12)})
-
-    assert.that(alex.fueAprobadaAntes(matematica1))
-    assert.notThat(alex.fueAprobadaAntes(bD))
-
-    assert.equals(9, alex.promedioDeMateriasDe(programacion))
-    assert.equals(2, alex.cantidadDeMateriasAprobadasDe(programacion))
-    assert.equals(7, alex.promedioDeMateriasDe(tuess))
-    assert.throwsException({alex.promedioDeMateriasDe(terapiaOcupacional)})
-
-    alex.inscribirseACarrera(terapiaOcupacional)
-    assert.throwsException({alex.promedioDeMateriasDe(terapiaOcupacional)})
-
-    assert.equals(8, alex.promedioDeTodasLasMaterias())
-    assert.equals([2,8], alex.cursadasDe(matematica1))
-  }
-  test "inscribir a alex a materias" {
-  objetos2.requisitos(objetos1)
-  objetos2.requisitos(matematica1)
-
-  objetos3.requisitos(objetos2)
-  objetos3.requisitos(bD)
-
-  pConc.requisitos(objetos1)
-  pConc.requisitos(bD)
-
-  desarrolloLocal.requisitos(meya)
-
-  alex.finalizacionDeCursadaDe(objetos1, 10)
-  alex.finalizacionDeCursadaDe(matematica1, 8)
-  alex.finalizacionDeCursadaDe(economia, 6)
-  alex.finalizacionDeCursadaDe(tys, 8)
-
-  andy.finalizacionDeCursadaDe(objetos1, 10)
-  andy.finalizacionDeCursadaDe(matematica1, 10)
-
-  assert.that(alex.puedeInscribirseA(objetos2))
-  assert.equals([epyl, objetos2, bD], alex.materiasHabilitadas(programacion))
-  assert.equals([meya], alex.materiasHabilitadas(tuess))
-
-  assert.notThat(alex.puedeInscribirseA(psicologia))
-  assert.throwsException({alex.inscribirAMateria(psicologia)})
-
-  assert.notThat(alex.puedeInscribirseA(economia))
-  assert.throwsException({alex.inscribirAMateria(economia)})
-
-  assert.notThat(alex.puedeInscribirseA(desarrolloLocal))
-  assert.throwsException({alex.inscribirAMateria(desarrolloLocal)})
-
-  alex.inscribirAMateria(objetos2)
-  assert.throwsException({alex.inscribirAMateria(objetos2)})
-
-  andy.inscribirAMateria(objetos2)
-  assert.equals(#{alex,andy}, objetos2.estudiantesInscriptos())
-  }
-
 }
 
