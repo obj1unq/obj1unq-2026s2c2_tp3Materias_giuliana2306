@@ -1,9 +1,136 @@
-import example.pepita
+import inscripcionAMaterias.*
 
-describe "group of tests for pepita" {
+describe "Inscripción a materias" {
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
+  const alex = new Estudiante()
+  const andy = new Estudiante()
+
+  const programacion = new Carrera()
+  const tuess = new Carrera()
+  const to = new Carrera()
+
+  const epl = new Materia()
+  const matematica1 = new Materia()
+  const objetos1 = new Materia()
+  const objetos2 = new Materia()
+  const objetos3 = new Materia()
+  const bd = new Materia()
+  const pconc = new Materia()
+
+  const meya = new Materia()
+  const tys = new Materia()
+  const economia = new Materia()
+  const desarrolloLocal = new Materia()
+
+  const lea = new Materia()
+  const cienciasDeLaSalud = new Materia()
+  const psicologia = new Materia()
+  const antropologia = new Materia()
+  const sociologia = new Materia()
+
+  method initialize() {
+
+    programacion.agregarMateria(epl)
+    programacion.agregarMateria(matematica1)
+    programacion.agregarMateria(objetos1)
+    programacion.agregarMateria(objetos2)
+    programacion.agregarMateria(objetos3)
+    programacion.agregarMateria(bd)
+    programacion.agregarMateria(pconc)
+
+    tuess.agregarMateria(meya)
+    tuess.agregarMateria(tys)
+    tuess.agregarMateria(economia)
+    tuess.agregarMateria(desarrolloLocal)
+
+    to.agregarMateria(lea)
+    to.agregarMateria(cienciasDeLaSalud)
+    to.agregarMateria(psicologia)
+    to.agregarMateria(antropologia)
+    to.agregarMateria(sociologia)
+
+    andy.inscribirseA(programacion)
+    andy.finalizoLaCursadaDe(objetos1, 10)
+    andy.finalizoLaCursadaDe(matematica1, 10)
   }
+  test "Inscribir a Alex a carreras" {
+    alex.inscribirseA(programacion)
+    alex.inscribirseA(tuess)
 
+    assert.that(alex.estaInscriptaEn(programacion))
+    assert.that(alex.estaInscriptaEn(tuess))
+    assert.notThat(alex.estaInscriptaEn(to))
+
+    assert.that(alex.materiaPerteneceACarrera(bd))
+    assert.notThat(alex.materiaPerteneceACarrera(psicologia))
+    assert.throwsException({alex.inscribirseA(programacion)})
+  }
+  test "historia academica de alex" {
+    alex.inscribirseA(programacion)
+    alex.inscribirseA(tuess)
+
+    alex.finalizoLaCursadaDe(matematica1, 2)
+    alex.finalizoLaCursadaDe(objetos1, 10)
+    alex.finalizoLaCursadaDe(economia, 6)
+    alex.finalizoLaCursadaDe(tys, 8)
+    alex.finalizoLaCursadaDe(matematica1, 8)
+    alex.finalizoLaCursadaDe(bd, 2)
+
+    assert.throwsException({alex.finalizoLaCursadaDe(matematica1, 7)})
+    assert.throwsException({alex.finalizoLaCursadaDe(bd, 12)})
+
+    assert.that(alex.aproboLaMateria(matematica1))
+    assert.notThat(alex.aproboLaMateria(bd))
+
+    assert.equals(9, alex.promedioDe(programacion))
+    assert.equals(2, alex.cantDeMateriasAprobadas(programacion))
+
+    assert.equals(7, alex.promedioDe(tuess))
+    assert.throwsException({alex.promedioDe(to)})
+
+    alex.inscribirseA(to)
+    assert.throwsException({alex.promedioDe(to)})
+
+    assert.equals(8, alex.promedioDeMateriasAprobadasDeCarreras())
+  }
+  test "Inscribir a Alex a las materias" {
+    alex.inscribirseA(programacion)
+    alex.inscribirseA(tuess)
+
+    alex.finalizoLaCursadaDe(matematica1, 2)
+    alex.finalizoLaCursadaDe(objetos1, 10)
+    alex.finalizoLaCursadaDe(economia, 6)
+    alex.finalizoLaCursadaDe(tys, 8)
+    alex.finalizoLaCursadaDe(matematica1, 8)
+    alex.finalizoLaCursadaDe(bd, 2)
+
+
+    objetos2.requisitos(#{objetos1, matematica1})
+    objetos3.requisitos(#{objetos2, bd})
+    pconc.requisitos(#{objetos1,bd})
+    desarrolloLocal.requisitos(#{meya})
+
+    assert.that(alex.puedeInscribirseA(objetos2))   
+
+    assert.equals(#{epl,objetos2,bd}, alex.materiasALasQuePuedeInscribirseEn(programacion, alex))
+    assert.equals(#{meya}, alex.materiasALasQuePuedeInscribirseEn(tuess, alex))
+
+    assert.notThat(alex.puedeInscribirseA(psicologia))
+
+    assert.throwsException({alex.inscribirseAMateria(psicologia)})
+
+    assert.throwsException({alex.inscribirseAMateria(economia)})
+    assert.notThat(alex.puedeInscribirseA(economia))   
+
+   assert.notThat(alex.puedeInscribirseA(desarrolloLocal)) 
+   assert.throwsException({alex.inscribirseAMateria(desarrolloLocal)})
+
+   alex.inscribirseAMateria(objetos2)
+   assert.throwsException({alex.inscribirseAMateria(objetos2)})
+
+   andy.inscribirseAMateria(objetos2)
+
+   assert.equals(#{alex,andy}, objetos2.estudiantesInscriptos())
+  }
 }
+
