@@ -64,17 +64,54 @@ class Estudiante {
   method materiasCursadasAprobadas() {
     return materiasCursadas.filter({notaDeMateria => notaDeMateria.nota() >= 6})
   }
-
+  method estaInscriptoEnMateria(_materia) {
+    return _materia.estudiantesInscriptos().contains(self)
+  }
+  method cumpleLosRequisitosDe(_materia) {
+    return _materia.requisitos().all({requisito => self.aproboLaMateria(requisito)})
+  }
+  method puedeInscribirseA(_materia) {
+    return self.materiaPerteneceACarrera(_materia)   && 
+           not self.aproboLaMateria(_materia)        &&
+           not self.estaInscriptoEnMateria(_materia) &&
+           self.cumpleLosRequisitosDe(_materia)
+  }
+  method inscribirseAMateria(_materia) {
+    self.validarInscribirseAMateria(_materia)
+    _materia.añadirEstudiante(self)
+  }
+  method validarInscribirseAMateria(_materia) {
+    if (not self.puedeInscribirseA(_materia)) {
+      self.error("No puede inscribirse a la materia")
+    }
+  }
+  method materiasALasQuePuedeInscribirseEn(_carrera, _estudiante) {
+    return _carrera.materias().filter({materia => _estudiante.puedeInscribirseA(materia)})
+  }
 }
 
 class Materia {
   var carrera = null
+  var requisitos = #{}
+  var estudiantesInscriptos = #{}
 
   method añadirCarrera(_carrera) {
     carrera = _carrera
   }
   method carrera() {
     return carrera
+  }
+  method requisitos(_values) {
+    requisitos = _values
+  }
+  method requisitos() {
+    return requisitos
+  }
+  method estudiantesInscriptos() {
+    return estudiantesInscriptos
+  }
+  method añadirEstudiante(_estudiante) {
+    estudiantesInscriptos.add(_estudiante)
   }
 }
 
