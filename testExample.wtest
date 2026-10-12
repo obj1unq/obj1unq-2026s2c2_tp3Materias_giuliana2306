@@ -104,11 +104,16 @@ describe "Inscripción a materias" {
     alex.finalizoLaCursadaDe(matematica1, 8)
     alex.finalizoLaCursadaDe(bd, 2)
 
+    objetos2.agregarRequisito(correlativas)
+    objetos3.agregarRequisito(correlativas)
+    pconc.agregarRequisito(correlativas)
+    desarrolloLocal.agregarRequisito(correlativas)
 
-    objetos2.requisitos(#{objetos1, matematica1})
-    objetos3.requisitos(#{objetos2, bd})
-    pconc.requisitos(#{objetos1,bd})
-    desarrolloLocal.requisitos(#{meya})
+
+    objetos2.agregarCorrelativas(#{objetos1, matematica1})
+    objetos3.agregarCorrelativas(#{objetos2, bd})
+    pconc.agregarCorrelativas(#{objetos1,bd})
+    desarrolloLocal.agregarCorrelativas(#{meya})
 
     assert.that(alex.puedeInscribirseA(objetos2))   
 
@@ -131,6 +136,83 @@ describe "Inscripción a materias" {
    andy.inscribirseAMateria(objetos2)
 
    assert.equals(#{alex,andy}, objetos2.estudiantesInscriptos())
+  }
+  test "Distintos tipos de requisitos" {
+
+    alex.inscribirseA(programacion)
+    alex.inscribirseA(tuess)
+
+    alex.finalizoLaCursadaDe(matematica1, 2)
+    alex.finalizoLaCursadaDe(objetos1, 10)
+    alex.finalizoLaCursadaDe(economia, 6)
+    alex.finalizoLaCursadaDe(tys, 8)
+    alex.finalizoLaCursadaDe(matematica1, 8)
+    alex.finalizoLaCursadaDe(bd, 2)
+
+    alex.inscribirseA(to)
+
+    objetos2.agregarRequisito(correlativas)
+    objetos3.agregarRequisito(correlativas)
+    pconc.agregarRequisito(correlativas)
+    desarrolloLocal.agregarRequisito(correlativas)
+
+
+    objetos2.agregarCorrelativas(#{objetos1, matematica1})
+    objetos3.agregarCorrelativas(#{objetos2, bd})
+    pconc.agregarCorrelativas(#{objetos1,bd})
+    desarrolloLocal.agregarCorrelativas(#{meya})
+
+    alex.inscribirseAMateria(objetos2)
+    andy.inscribirseAMateria(objetos2)
+
+    lea.año(1)
+    lea.creditos(8)
+    lea.agregarRequisito(sinRequisitos)
+
+    cienciasDeLaSalud.año(1)
+    cienciasDeLaSalud.creditos(8)
+    cienciasDeLaSalud.agregarRequisito(sinRequisitos)
+
+    psicologia.año(2)
+    psicologia.creditos(4)
+    psicologia.agregarRequisito(porAño)
+
+    antropologia.año(2)
+    antropologia.creditos(4)
+    antropologia.creditosRequeridos(8)
+    antropologia.agregarRequisito(creditos)
+
+    sociologia.año(3)
+    sociologia.creditos(8)
+    sociologia.creditosRequeridos(10)
+    sociologia.agregarRequisito(creditos)   
+
+    objetos1.año(1)
+    objetos1.creditos(8)
+
+    matematica1.año(1)
+    objetos1.creditos(8)
+
+    bd.año(1)
+    bd.creditos(8)
+
+    andy.inscribirseA(to)
+
+    assert.equals(#{lea,cienciasDeLaSalud}, andy.materiasALasQuePuedeInscribirseEn(to, andy))
+    andy.finalizoLaCursadaDe(lea, 10)
+    assert.equals(#{antropologia,cienciasDeLaSalud}, andy.materiasALasQuePuedeInscribirseEn(to, andy))
+
+    andy.finalizoLaCursadaDe(antropologia, 10)
+    assert.equals(#{sociologia,cienciasDeLaSalud}, andy.materiasALasQuePuedeInscribirseEn(to, andy))
+
+    andy.finalizoLaCursadaDe(cienciasDeLaSalud, 10)
+    assert.equals(#{sociologia,psicologia}, andy.materiasALasQuePuedeInscribirseEn(to, andy))
+
+    andy.inscribirseAMateria(psicologia)
+    andy.inscribirseAMateria(sociologia)
+
+    assert.equals(#{andy}, psicologia.estudiantesInscriptos())
+    assert.equals(#{andy}, sociologia.estudiantesInscriptos())
   }
 }
 
