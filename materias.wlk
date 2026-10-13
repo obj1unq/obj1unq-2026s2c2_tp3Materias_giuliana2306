@@ -56,7 +56,7 @@ class NotaDeMateria {
 object creditos {
 
   method cumpleElRequisito(_estudiante,_materia) {
-    return _estudiante.creditos() >= _materia.creditosRequeridos()
+    return  _estudiante.historiaAcademica().creditosDe(_materia.carrera()) >= _materia.creditosRequeridos()
   }
 }
 
