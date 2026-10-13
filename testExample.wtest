@@ -1,4 +1,5 @@
 import inscripcionAMaterias.*
+import materias.*
 
 describe "Inscripción a materias" {
 
@@ -93,7 +94,7 @@ describe "Inscripción a materias" {
 
     assert.equals(8, alex.promedioDeMateriasAprobadasDeCarreras())
   }
-  test "Inscribir a Alex a las materias" {
+    test "Inscribir a Alex a las materias" {
     alex.inscribirseA(programacion)
     alex.inscribirseA(tuess)
 
@@ -216,3 +217,7 @@ describe "Inscripción a materias" {
   }
 }
 
+/*
+Realizar un diagrama dinámico que muestre la relación entre Alex, 
+sus materias cursadas (con la nota) e inscriptas de acuerdo al caso de prueba del punto 3
+*/

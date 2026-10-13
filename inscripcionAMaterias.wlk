@@ -1,22 +1,39 @@
 
+
+import materias.*
 class Estudiante {
-  var carreras = #{}
-  var materiasCursadas = #{}
-  var creditos = 0
+  var historiaAcademica = HistoriaAcademica
 
   method inscribirseA(_carrera) {
     self.validarInscribirseA(_carrera)
-    carreras.add(_carrera)
+    historiaAcademica.inscribirseA(_carrera)
   }
   method validarInscribirseA(_carrera) {
-    if(carreras.contains(_carrera)) {
+    if(HistoriaAcademica.carreras().contains(_carrera)) {
       self.error("Ya esta inscripto en la carrera")
     }
   }
-  method carreras() {
-    return carreras
+ 
+  method inscribirseAMateria(_materia) {
+    self.validarInscribirseAMateria(_materia)
+    _materia.añadirEstudiante(self)
   }
-  method materiaPerteneceACarrera(_materia) {
+  method validarInscribirseAMateria(_materia) {
+    if (not historiaAcademica.puedeInscribirseA(_materia)) {
+      self.error("No puede inscribirse a la materia")
+    }
+  }
+  method creditos() {
+    return creditos
+  }
+}
+
+class HistoriaAcademica {
+  var materiasCursadas = []
+  var carreras = #{}
+  var creditos = 0
+
+   method materiaPerteneceACarrera(_materia) {
     return carreras.any({carrera => carrera.materias().contains(_materia)})
   }
   method estaInscriptaEn(_carrera) {
@@ -75,101 +92,15 @@ class Estudiante {
            not self.estaInscriptoEnMateria(_materia) &&
            _materia.requisito().cumpleElRequisito(self, _materia)
   }
-  method inscribirseAMateria(_materia) {
-    self.validarInscribirseAMateria(_materia)
-    _materia.añadirEstudiante(self)
-  }
-  method validarInscribirseAMateria(_materia) {
-    if (not self.puedeInscribirseA(_materia)) {
-      self.error("No puede inscribirse a la materia")
-    }
-  }
-  method materiasALasQuePuedeInscribirseEn(_carrera, _estudiante) {
+   method materiasALasQuePuedeInscribirseEn(_carrera, _estudiante) {
     return _carrera.materias().filter({materia => _estudiante.puedeInscribirseA(materia)})
   }
-  method creditos() {
-    return creditos
+  method carreras() {
+    return carreras
   }
+  method inscribirseA(_carrera) {
+    carreras.add(_carrera)
+  }
+
 }
 
-class Materia {
-  var carrera = null
-  var requisito = sinRequisitos
-  var estudiantesInscriptos = #{}
-  var correlativas = #{}
-  var property año = 0
-  var property creditos = 0
-  var property creditosRequeridos = 0
-
-  method añadirCarrera(_carrera) {
-    carrera = _carrera
-  }
-  method carrera() {
-    return carrera
-  }
-  method estudiantesInscriptos() {
-    return estudiantesInscriptos
-  }
-  method añadirEstudiante(_estudiante) {
-    estudiantesInscriptos.add(_estudiante)
-  }
-  method agregarCorrelativas(_correlativas) {
-    correlativas = _correlativas
-  }
-  method agregarRequisito(_requisito) {
-    requisito = _requisito
-  }
-  method correlativas() {
-    return correlativas
-  }
-  method requisito() {
-    return requisito
-  }
-}
-
-class Carrera {
-  var materias = #{}
-
-  method materias() {
-    return materias
-  }
-  method agregarMateria(_materia) {
-    materias.add(_materia)
-     _materia.añadirCarrera(self)
-  }
-  method materiasAnterioresA(_materia) {
-    return materias.filter({materia => materia.año() == (_materia.año() - 1)})
-  }
-}
-
-class NotaDeMateria {
-  var property nota = 0
-  var property materia = null
-}
-
-object creditos {
-
-  method cumpleElRequisito(_estudiante,_materia) {
-    return _estudiante.creditos() >= _materia.creditosRequeridos()
-  }
-}
-
-object correlativas {
-
-  method cumpleElRequisito(_estudiante, _materia) {
-    return _materia.correlativas().all({materia => _estudiante.aproboLaMateria(materia)})
-  }
-}
-
-object porAño {
-
-  method cumpleElRequisito(_estudiante, _materia) {
-    return _materia.carrera().materiasAnterioresA(_materia).all({materia => _estudiante.aproboLaMateria(materia)})
-  }
-}
-object sinRequisitos {
-  
-  method cumpleElRequisito(_estudiante, _materia) {
-    return true
-  }
-}
