@@ -1,5 +1,5 @@
-import inscripcionAMaterias.*
-import materias.*
+import Estudiante.*
+import materia.*
 
 describe "Inscripción a materias" {
 
@@ -63,8 +63,8 @@ describe "Inscripción a materias" {
     assert.that(alex.estaInscriptaEn(tuess))
     assert.notThat(alex.estaInscriptaEn(to))
 
-    assert.that(alex.materiaPerteneceACarrera(bd))
-    assert.notThat(alex.materiaPerteneceACarrera(psicologia))
+    assert.that(alex.historiaAcademica().materiaPerteneceACarrera(bd))
+    assert.notThat(alex.historiaAcademica().materiaPerteneceACarrera(psicologia))
     assert.throwsException({alex.inscribirseA(programacion)})
   }
 
@@ -82,19 +82,19 @@ describe "Inscripción a materias" {
     assert.throwsException({alex.finalizoLaCursadaDe(matematica1, 7)})
     assert.throwsException({alex.finalizoLaCursadaDe(bd, 12)})
 
-    assert.that(alex.aproboLaMateria(matematica1))
-    assert.notThat(alex.aproboLaMateria(bd))
+    assert.that(alex.historiaAcademica().aproboLaMateria(matematica1))
+    assert.notThat(alex.historiaAcademica().aproboLaMateria(bd))
 
-    assert.equals(9, alex.promedioDe(programacion))
-    assert.equals(2, alex.cantDeMateriasAprobadas(programacion))
+    assert.equals(9, alex.historiaAcademica().promedioDe(programacion))
+    assert.equals(2, alex.historiaAcademica().cantDeMateriasAprobadas(programacion))
 
-    assert.equals(7, alex.promedioDe(tuess))
-    assert.throwsException({alex.promedioDe(to)})
+    assert.equals(7, alex.historiaAcademica().promedioDe(tuess))
+    assert.throwsException({alex.historiaAcademica().promedioDe(to)})
 
     alex.inscribirseA(to)
-    assert.throwsException({alex.promedioDe(to)})
+    assert.throwsException({alex.historiaAcademica().promedioDe(to)})
 
-    assert.equals(8, alex.promedioDeMateriasAprobadasDeCarreras())
+    assert.equals(8, alex.historiaAcademica().promedioDeMateriasAprobadasDeCarreras())
   }
 
   test "Inscribir a Alex a las materias" {
@@ -118,19 +118,19 @@ describe "Inscripción a materias" {
     pconc.agregarCorrelativas(#{objetos1, bd})
     desarrolloLocal.agregarCorrelativas(#{meya})
 
-    assert.that(alex.puedeInscribirseA(objetos2))   
+    assert.that(alex.historiaAcademica().puedeInscribirseA(objetos2,alex))   
 
-    assert.equals(#{epl, objetos2, bd}, alex.materiasALasQuePuedeInscribirseEn(programacion, alex))
-    assert.equals(#{meya}, alex.materiasALasQuePuedeInscribirseEn(tuess, alex))
+    assert.equals(#{epl, objetos2, bd}, alex.historiaAcademica().materiasALasQuePuedeInscribirseEn(programacion, alex))
+    assert.equals(#{meya}, alex.historiaAcademica().materiasALasQuePuedeInscribirseEn(tuess, alex))
 
-    assert.notThat(alex.puedeInscribirseA(psicologia))
+    assert.notThat(alex.historiaAcademica().puedeInscribirseA(psicologia, alex))
 
     assert.throwsException({alex.inscribirseAMateria(psicologia)})
 
     assert.throwsException({alex.inscribirseAMateria(economia)})
-    assert.notThat(alex.puedeInscribirseA(economia))   
+    assert.notThat(alex.historiaAcademica().puedeInscribirseA(economia, alex))   
 
-    assert.notThat(alex.puedeInscribirseA(desarrolloLocal)) 
+    assert.notThat(alex.historiaAcademica().puedeInscribirseA(desarrolloLocal, alex)) 
     assert.throwsException({alex.inscribirseAMateria(desarrolloLocal)})
 
     alex.inscribirseAMateria(objetos2)
@@ -201,15 +201,15 @@ describe "Inscripción a materias" {
 
     andy.inscribirseA(to)
 
-    assert.equals(#{lea, cienciasDeLaSalud}, andy.materiasALasQuePuedeInscribirseEn(to, andy))
+    assert.equals(#{lea, cienciasDeLaSalud}, andy.historiaAcademica().materiasALasQuePuedeInscribirseEn(to, andy))
     andy.finalizoLaCursadaDe(lea, 10)
-    assert.equals(#{antropologia, cienciasDeLaSalud}, andy.materiasALasQuePuedeInscribirseEn(to, andy))
+    assert.equals(#{antropologia, cienciasDeLaSalud}, andy.historiaAcademica().materiasALasQuePuedeInscribirseEn(to, andy))
 
     andy.finalizoLaCursadaDe(antropologia, 10)
-    assert.equals(#{sociologia, cienciasDeLaSalud}, andy.materiasALasQuePuedeInscribirseEn(to, andy))
+    assert.equals(#{sociologia, cienciasDeLaSalud}, andy.historiaAcademica().materiasALasQuePuedeInscribirseEn(to, andy))
 
     andy.finalizoLaCursadaDe(cienciasDeLaSalud, 10)
-    assert.equals(#{sociologia, psicologia}, andy.materiasALasQuePuedeInscribirseEn(to, andy))
+    assert.equals(#{sociologia, psicologia}, andy.historiaAcademica().materiasALasQuePuedeInscribirseEn(to, andy))
 
     andy.inscribirseAMateria(psicologia)
     andy.inscribirseAMateria(sociologia)
